@@ -4,7 +4,7 @@ session_start();
 
 $DB_host = "localhost";
 $DB_user = "appuser";
-$DB_pass = "redhat";
+$DB_pass = "yourpassword";
 $DB_name = "app";
 
 try
