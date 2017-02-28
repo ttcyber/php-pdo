@@ -1,59 +1,69 @@
 <?php
-require_once 'db.php';
+session_start();
+require_once("class.user.php");
+$login = new USER();
 
-if($user->is_loggedin()!="")
+if($login->is_loggedin()!="")
 {
- $user->redirect('home.php');
+	$login->redirect('home.php');
 }
 
 if(isset($_POST['btn-login']))
 {
- $uname = $_POST['txt_uname_email'];
- $umail = $_POST['txt_uname_email'];
- $upass = $_POST['txt_password'];
-  
- if($user->login($uname,$umail,$upass))
- {
-  $user->redirect('home.php');
- }
- else
- {
-  $error = "Wrong Details !";
- } 
+	$uname = strip_tags($_POST['txt_uname_email']);
+	$umail = strip_tags($_POST['txt_uname_email']);
+	$upass = strip_tags($_POST['txt_password']);
+		
+	if($login->doLogin($uname,$umail,$upass))
+	{
+		$login->redirect('home.php');
+	}
+	else
+	{
+		$error = "Wrong Details !";
+	}	
 }
 ?>
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<html>
 <head>
-<title>Login </title>
-<link rel="stylesheet" href="css/custom.css" type="text/css"  />
+<title>Login</title>
+
 </head>
 <body>
-        <form method="post">
-           Sign in.<hr />
-            <?php
-            if(isset($error))
-            {
-                  ?>
-                  <div class="alert alert-danger">
-                      <i class="glyphicon glyphicon-warning-sign"></i> &nbsp; <?php echo $error; ?> !
-                  </div>
-                  <?php
-            }
-            ?>
-            <div class="form-group">
-             <input type="text"   name="txt_uname_email" placeholder="Username or E mail ID" required />
-            </div>
-            <div class="form-group">
-             <input type="password" name="txt_password" placeholder="Your Password" required />
-          
-             <button type="submit" name="btn-login" class="btn btn-block btn-primary">
-                 <i class="glyphicon glyphicon-log-in"></i>&nbsp;SIGN IN
-                </button>
-            </div>
-            <br />
-            <a href="sign-up.php">Sign Up</a>
-        </form>
 
+       <form  method="post" id="login-form">
+      
+        <h2>Log In to WebApp.</h2><hr />
+        
+   <!-- error -->
+        <?php
+			if(isset($error))
+			{
+					echo $error;
+               
+			}
+		?>
+       
+        <input type="text"  name="txt_uname_email" placeholder="Username or E mail ID" required />
+        <input type="password" name="txt_password" placeholder="Your Password" />
+      
+       
+     	<hr />
+       
+            <button type="submit" name="btn-login">
+                &nbsp; SIGN IN
+            </button>
+      
+            <label>Don't have account yet ! <a href="adduser.php">Sign Up</a></label>
+      </form>
+<hr />
+<pre>
+Add this to your directory as a .htaccess file .  If it does work re-start apache2
+php_flag display_startup_errors on
+php_flag display_errors on
+php_flag html_errors on
+</pre>
 
 </body>
 </html>
